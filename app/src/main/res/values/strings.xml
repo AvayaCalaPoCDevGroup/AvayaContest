@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Avaya Contest</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_test">Tab Test</string>
+
+    <string name="spnr_seleccion_evento">Seleccione Evento:</string>
+    <string name="spnr_seleccion_sala">Seleccione Sala:</string>
+    <string name="btn_ir_a_sala">Ir a la Sala</string>
+
+    <string name="msg_activitiseleccion_sala_invalid">La sala esta cerrada, elegir una diferente.</string>
+
+    <string name="dialog_wait_title">Informacion</string>
+    <string name="dialog_wait_msg">Obteniendo Informacion...</string>
+
+    <string name="fragment_reg_info">Presiona para registrar asistente</string>
+
+    <string name="menu_main_salir">Salir de Sala</string>
+</resources>
