@@ -1,6 +1,7 @@
 package com.example.avayacontest.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -32,6 +33,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+
 public class ActivitySeleccionEvento extends AppCompatActivity {
 
     private ArrayList<Evento> eventos = new ArrayList<>();
@@ -50,6 +53,13 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion_evento);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.app_name);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
         mSharedPreferences = getSharedPreferences(Constants.AVAYA_SHARED, 0);
         iniciarControles();
         inicializarListas();
@@ -59,14 +69,14 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
     private void getEvents() {
         HashMap<String, String> params = new HashMap<>();
         params.put("action", "todosLosEventos");
-        new DoWebMethod(WebMethods.URL_SERVER, 0).execute(params);
+        new DoWebMethod(WebMethods.URL_SERVER, 0).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
     }
 
     private void getSalasByIdEvento(UUID id){
         HashMap<String, String> params = new HashMap<>();
         params.put("action", "informacionPorEvento");
         params.put("idEvento", id.toString());
-        new DoWebMethod(WebMethods.URL_SERVER, 1).execute(params);
+        new DoWebMethod(WebMethods.URL_SERVER, 1).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
     }
 
     private void iniciarControles() {
@@ -99,7 +109,7 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
         spnr_seleccion_sala.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(salas.get(position).estatusSala.equals("TERMINATED")){
+                if(salas.get(position).estatusSala.equals("TERMINATED")){ //Aqui falta quitar las inactivas
                     if(position != 0)
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.msg_activitiseleccion_sala_invalid), Toast.LENGTH_SHORT).show();
                     spnr_seleccion_sala.setSelection(0);

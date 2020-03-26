@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Avaya Contest</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_test">Tab Test</string>
+    <string name="tab_registro">Registro</string>
+    <string name="tab_asistentes">Asistentes</string>
 
     <string name="spnr_seleccion_evento">Seleccione Evento:</string>
     <string name="spnr_seleccion_sala">Seleccione Sala:</string>
@@ -16,4 +15,15 @@
     <string name="fragment_reg_info">Presiona para registrar asistente</string>
 
     <string name="menu_main_salir">Salir de Sala</string>
+    <string name="fragment_reg_invlaidqr">QR invalido</string>
+    <string name="fragment_reg_invaliduser">El registro no existe</string>
+    <string name="fragment_reg_unkonwerror">Error Desconocido</string>
+    <string name="dialog_itegrante_title">Informacion de Integrante</string>
+    <string name="dialog_itegrante_name">Nombre:</string>
+    <string name="dialog_itegrante_empresa">Empresa:</string>
+    <string name="dialog_itegrante_tel">Movil:</string>
+    <string name="dialog_itegrante_mail">Correo:</string>
+    <string name="dialog_itegrante_hora">Hora de Ingreso:</string>
+    <string name="dialog_itegrante_quitar">Quitar Asistencia</string>
+    <string name="dialog_itegrante_continuar">Continuar</string>
 </resources>

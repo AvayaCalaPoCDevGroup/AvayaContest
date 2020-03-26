@@ -14,9 +14,6 @@ import com.example.avayacontest.Models.Sala;
 import com.example.avayacontest.R;
 
 public class FragmentAsistentes extends BaseFragment {
-    public FragmentAsistentes(String name, Sala sala) {
-        super(name, sala);
-    }
 
     @Nullable
     @Override

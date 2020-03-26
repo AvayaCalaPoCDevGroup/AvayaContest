@@ -11,14 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.example.avayacontest.Models.Sala;
 
 public class BaseFragment extends Fragment {
-    public String fragment_name = "Name Fragment";
-
     protected Sala mSala;
-
-    public BaseFragment(String name, Sala sala){
-        this.mSala = sala;
-        this.fragment_name = name;
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -28,6 +21,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("BaseFragment", "onViewCreated de fragment " + fragment_name);
+
     }
 }

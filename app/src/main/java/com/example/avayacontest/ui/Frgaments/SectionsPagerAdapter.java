@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_test};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_registro, R.string.tab_asistentes};
     private ArrayList<BaseFragment> fragmentArrayList;
     private final Context mContext;
 
@@ -40,8 +40,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        //return mContext.getResources().getString(TAB_TITLES[position]);
-        return fragmentArrayList.get(position).fragment_name;
+        return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
     @Override

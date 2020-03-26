@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class Sala {
     public UUID idSala;
-    public String nombreSala = "Seleccione";
+    public String nombreSala = "Seleccione Sala";
     public String avayaSpacesId;
     public String estatusSala = "TERMINATED"; //Default status
     public Date fechaSala;
