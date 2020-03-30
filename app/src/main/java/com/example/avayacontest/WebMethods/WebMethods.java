@@ -47,6 +47,7 @@ public class WebMethods {
     public static String requestPostMethodAvayaEndpoint(HashMap<String, String> parametros, String URL){
 
         //String json = new Gson().toJson(params);
+        Log.e("WebMethods", "requestPostMethodAvayaEndpoint: " + URL);
         String response = "-1";
 
         MultipartFormDataTest multipart = null;

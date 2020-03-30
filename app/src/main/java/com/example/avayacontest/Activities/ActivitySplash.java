@@ -26,7 +26,7 @@ public class ActivitySplash extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(sharedPreferencesAvaya.getString(Constants.SHARED_EVENT_JSON,"").equals("")){
+                if(sharedPreferencesAvaya.getString(Constants.SHARED_SALA_JSON,"").equals("")){
                     Intent i = new Intent(getApplicationContext(), ActivitySeleccionEvento.class);
                     startActivity(i);
                     finish();

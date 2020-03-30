@@ -6,4 +6,5 @@ public class Constants {
     //SHARED PREFERENCES
     public static String AVAYA_SHARED = "AVAYA SHARED";
     public static String SHARED_EVENT_JSON = "SHARED_EVENT_JSON";
+    public static String SHARED_SALA_JSON = "SHARED_SALA_JSON   ";
 }

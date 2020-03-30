@@ -22,21 +22,22 @@
             android:text="@string/dialog_itegrante_title" />
 
         <FrameLayout
-            android:layout_margin="30dp"
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_dialogIntegrante_foto"
                 android:layout_gravity="center"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/qr_scan"/>
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -53,8 +54,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -71,8 +73,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -89,8 +92,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -107,8 +111,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -125,7 +130,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="horizontal">
             <Button

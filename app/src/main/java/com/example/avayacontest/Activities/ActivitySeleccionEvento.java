@@ -128,7 +128,8 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
         btn_seleccion_ir.setOnClickListener(v -> {
 
             SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putString(Constants.SHARED_EVENT_JSON, new Gson().toJson(salas.get(spnr_seleccion_sala.getSelectedItemPosition())));
+            editor.putString(Constants.SHARED_EVENT_JSON, new Gson().toJson(eventos.get(spnr_seleccion_evento.getSelectedItemPosition())));
+            editor.putString(Constants.SHARED_SALA_JSON, new Gson().toJson(salas.get(spnr_seleccion_sala.getSelectedItemPosition())));
             editor.commit();
 
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -171,6 +172,12 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.e("ActivitySeleccionEvento", "On post Execute, resp = " + s);
+            Log.e("FragmentRegistro", "Response: " + s);
+            if(s.equals("-1")) {
+                Toast.makeText(ActivitySeleccionEvento.this, getResources().getString(R.string.web_error), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                return;
+            }
             switch (option){
                 case 0:
                     ActualizaEventos(new Gson().fromJson(s, Eventos.class).eventos);
@@ -181,7 +188,6 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
                 default:
                     Log.e("ActivitySeleccionEvento", "invalid option");
             }
-
             dialog.dismiss();
         }
     }

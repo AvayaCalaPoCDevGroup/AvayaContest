@@ -1,8 +1,6 @@
 package com.example.avayacontest.ui.Frgaments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,21 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 
-import com.example.avayacontest.Activities.ActivitySeleccionEvento;
 import com.example.avayacontest.Activities.MainActivity;
-import com.example.avayacontest.Clases.Constants;
 import com.example.avayacontest.Interfaces.IScanResultListener;
 import com.example.avayacontest.Models.Integrante;
 import com.example.avayacontest.Models.IntegrantesResponse;
-import com.example.avayacontest.Models.ResgistroResponse;
-import com.example.avayacontest.Models.Sala;
+import com.example.avayacontest.Models.GenericResponse;
 import com.example.avayacontest.R;
 import com.example.avayacontest.WebMethods.WebMethods;
 import com.example.avayacontest.ui.Dialogs.DialogIntegrante;
@@ -32,13 +25,14 @@ import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 
 public class FragmentRegistro extends BaseFragment implements IScanResultListener {
 
     private ImageView iv_fragmentreg_scan;
-    private int LAST_IDINTEGRANTE = 0;
+    private UUID LAST_IDINTEGRANTE = new UUID(0l,0l);
 
     @Nullable
     @Override
@@ -62,12 +56,12 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
     public void onScanResult(String result) {
         //Toast.makeText(getContext(), "Result: " + result, Toast.LENGTH_SHORT).show();
         try{
-            int idIntegrante = Integer.parseInt(result);
+            UUID idIntegrante = UUID.fromString(result);
             LAST_IDINTEGRANTE = idIntegrante;
             HashMap<String, String> params = new HashMap<>();
-            params.put("action", "asistencia");
-            params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
-            params.put("idIntegrante", ""+idIntegrante);
+            params.put("action", "integrantesPorID");
+            params.put("integranteId", idIntegrante.toString());
+
             new DoWebMethodsAsync(WebMethods.URL_SERVER, 0).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
 
         } catch (Exception ex){
@@ -87,6 +81,14 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
             dialog = ProgressDialog.show(getActivity(), getResources().getString(R.string.dialog_wait_title), getResources().getString(R.string.dialog_wait_msg), true);
         }
 
+        /**
+         * Clase para consumir los metodos del endpoint en segundo plano
+         * @param url url del endpoint
+         * @param option opciones que indican el metodo a consumir y la respuesta esperada
+         *               0 - Resgistrar participante con el metodo Registrar Participante del endpoint
+         *               1 - Buscar integrante en sala y registrarlo de no existir con el segundo metodo del endpoint (quitar registro, QuitarAsistencia comentarios TRUE)
+         *               2 - Buscar Integrante en la sala actual y mostrar su informacion
+         */
         public DoWebMethodsAsync(String url, int option){
             this.option = option;
             this.url = url;
@@ -103,26 +105,40 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.e("FragmentRegistro", "Response: " + s);
+            Log.e("FragmentRegistro", "Response: " + s);
+            if(s.equals("-1")) {
+                Toast.makeText(getContext(), getResources().getString(R.string.web_error), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                return;
+            }
             switch (option){
                 case 0:
-                    ResgistroResponse resgistroResponse = new Gson().fromJson(s,ResgistroResponse.class);
-                    if(resgistroResponse.message.equals("El participante ya se ha registrado a la sala") || resgistroResponse.code == 200){
+                    Integrante integrante = new Gson().fromJson(s, Integrante.class);
+                    if(integrante.code == 400){
+                        Toast.makeText(getContext(),integrante.message,Toast.LENGTH_SHORT).show();
+                    } else {
+                        DialogIntegrante dialogIntegrante = new DialogIntegrante(getActivity(), integrante, getActivity());
+                        dialogIntegrante.setCancelable(false);
+                        dialogIntegrante.show();
+                    }
+                    /*if(resgistroResponse.message.equals("El participante ya se ha registrado a la sala") || resgistroResponse.code == 200){
                         if(resgistroResponse.code == 400){
                             //reproducir sonido y vibrar, registro doble
                         }
+                        //PENDIENTE: aqui falta procedimiento, ya que si un usuario no esta en la sala, pero ya se registro antes aun nos manda que ya se registro en la sala
                         Toast.makeText(getContext(), resgistroResponse.message, Toast.LENGTH_SHORT).show();
                         HashMap<String, String> params = new HashMap<>() ;
                         params.put("action", "integrantesConAsistenciaSala");
                         params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
-                        new DoWebMethodsAsync(WebMethods.URL_SERVER, 1).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
+                        new DoWebMethodsAsync(WebMethods.URL_SERVER, 2).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
                     } else if (resgistroResponse.message.equals("El participante no se ha registrado al Evento")){
                         Toast.makeText(getContext(), getResources().getString(R.string.fragment_reg_invaliduser), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), getResources().getString(R.string.fragment_reg_unkonwerror), Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                     break;
-                case 1:
-                    IntegrantesResponse integrantes = new Gson().fromJson(s, IntegrantesResponse.class);
+                case 2:
+                    /*IntegrantesResponse integrantes = new Gson().fromJson(s, IntegrantesResponse.class);
 
                     Integrante integrante = null;
                     for(int i = 0; i < integrantes.participantes.size(); i++){
@@ -133,9 +149,9 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
                         }
                     }
                     //Mostrar el integrante en el dialog
-                    DialogIntegrante dialogIntegrante = new DialogIntegrante(getContext(), integrante);
+                    DialogIntegrante dialogIntegrante = new DialogIntegrante(getActivity(), integrante, getActivity());
                     dialogIntegrante.setCancelable(false);
-                    dialogIntegrante.show();
+                    dialogIntegrante.show();*/
                     break;
             }
             dialog.dismiss();

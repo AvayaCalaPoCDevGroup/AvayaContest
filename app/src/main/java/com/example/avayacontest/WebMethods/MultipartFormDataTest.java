@@ -81,6 +81,8 @@ public class MultipartFormDataTest {
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true);    // indicates POST method
         httpConn.setDoInput(true);
+        httpConn.setConnectTimeout(1000*5);
+        httpConn.setReadTimeout(1000*5);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
         outputStream = httpConn.getOutputStream();

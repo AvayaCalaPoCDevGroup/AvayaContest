@@ -7,7 +7,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_spnr_unit"
+        android:background="@drawable/bg_spnr_unitsala"
         android:id="@+id/ll_unitevento_main"
         android:elevation="7dp"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_margin="5dp"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:textColor="@color/color_text_unit_spnr"
+            android:textColor="@color/colorPrimary"
             android:text="TextView" />
 
         <LinearLayout
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/color_text_unit_spnr"
+                android:textColor="@color/colorPrimary"
                 android:text="TextView" />
 
             <TextView
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/color_text_unit_spnr"
+                android:textColor="@color/colorPrimary"
                 android:text="TextView" />
         </LinearLayout>
     </LinearLayout>

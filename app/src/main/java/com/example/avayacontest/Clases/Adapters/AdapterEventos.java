@@ -41,8 +41,8 @@ public class AdapterEventos extends ArrayAdapter<Evento> {
         } else {
             dateFormatter.format(eventos.get(position).fechaEvento);
 
-            tv_unitevento_fecha.setText(dateFormatter.format(eventos.get(position).fechaEvento));
-            tv_unitevento_hora.setText(eventos.get(position).horaEvento);
+            tv_unitevento_fecha.setText(getContext().getResources().getString(R.string.fecha) + dateFormatter.format(eventos.get(position).fechaEvento));
+            tv_unitevento_hora.setText(getContext().getResources().getString(R.string.hora) + eventos.get(position).horaEvento);
         }
 
         tv_unitevento_nombre.setText(eventos.get(position).nombreEvento);

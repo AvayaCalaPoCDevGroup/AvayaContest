@@ -33,7 +33,7 @@ public class AdapterSalas extends ArrayAdapter<Sala> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         //Voy a usar el mismo layput por que ocupa los mismo datos que evento;
-        View view = inflater.inflate(R.layout.unit_spnr_evento,parent,false);
+        View view = inflater.inflate(R.layout.unit_spnr_sala,parent,false);
 
         TextView tv_unitevento_nombre = view.findViewById(R.id.tv_unitevento_nombre);
         TextView tv_unitevento_fecha = view.findViewById(R.id.tv_unitevento_fecha);
@@ -46,14 +46,16 @@ public class AdapterSalas extends ArrayAdapter<Sala> {
         } else {
             dateFormatter.format(salas.get(position).fechaSala);
 
-            tv_unitevento_fecha.setText(dateFormatter.format(salas.get(position).fechaSala));
-            tv_unitevento_hora.setText(salas.get(position).horaSala);
+            tv_unitevento_fecha.setText(getContext().getResources().getString(R.string.fecha) + dateFormatter.format(salas.get(position).fechaSala));
+            tv_unitevento_hora.setText(getContext().getResources().getString(R.string.hora) + salas.get(position).horaSala);
         }
 
-        if(salas.get(position).estatusSala.equals("TERMINATED")){ //Condicion para determinar si la sala sigue activa.
+        if(position == 0){//El elemento seleccione siempre va le el color activo
+            ll_unitevento_main.setBackgroundResource(R.drawable.bg_spnr_unitsala);
+        } else if(salas.get(position).estatusSala.equals("TERMINATED")){ //Condicion para determinar si la sala sigue activa.
             ll_unitevento_main.setBackgroundResource(R.drawable.bg_spnr_unit_terminated);
         } else {
-            ll_unitevento_main.setBackgroundResource(R.drawable.bg_spnr_unit);
+            ll_unitevento_main.setBackgroundResource(R.drawable.bg_spnr_unitsala);
         }
 
         tv_unitevento_nombre.setText(salas.get(position).nombreSala);

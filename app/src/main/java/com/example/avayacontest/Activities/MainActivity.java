@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.avayacontest.Clases.Constants;
 import com.example.avayacontest.Interfaces.IScanResultListener;
+import com.example.avayacontest.Models.Evento;
 import com.example.avayacontest.Models.Sala;
 import com.example.avayacontest.R;
 import com.example.avayacontest.ui.Frgaments.BaseFragment;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public Sala mSala;
+    public Evento mEvento;
     private SharedPreferences mSharedPreferences;
     private IScanResultListener mScanResultListener;
 
@@ -47,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         mSharedPreferences = getSharedPreferences(Constants.AVAYA_SHARED,0);
-        mSala = new Gson().fromJson(mSharedPreferences.getString(Constants.SHARED_EVENT_JSON, ""), Sala.class);
+        mSala = new Gson().fromJson(mSharedPreferences.getString(Constants.SHARED_SALA_JSON, ""), Sala.class);
+        mEvento = new Gson().fromJson(mSharedPreferences.getString(Constants.SHARED_EVENT_JSON, ""), Evento.class);
         //Aqui Creamos los fragments que se van a llenar en el tab
         ArrayList<BaseFragment> fragmentList = new ArrayList<>();
         fragmentList.add(new FragmentRegistro());
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menu_main_exit:
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(Constants.SHARED_SALA_JSON, "");
                 editor.putString(Constants.SHARED_EVENT_JSON, "");
                 editor.commit();
                 Intent i = new Intent(getApplicationContext(), ActivitySeleccionEvento.class);

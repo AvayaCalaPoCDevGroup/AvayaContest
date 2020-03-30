@@ -22,6 +22,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
+        android:text="@string/spnr_seleccion_evento"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_weight="1"/>
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:background="@null"
             android:layout_gravity="center"/>
     </FrameLayout>
 
@@ -41,6 +46,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
+        android:text="@string/spnr_seleccion_sala"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:layout_weight="1"/>
     <FrameLayout
         android:layout_width="match_parent"
@@ -51,6 +60,7 @@
             android:id="@+id/spnr_seleccion_sala"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@null"
             android:gravity="center"
             android:layout_gravity="center"/>
     </FrameLayout>
