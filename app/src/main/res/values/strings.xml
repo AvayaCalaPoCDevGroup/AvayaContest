@@ -31,4 +31,14 @@
     <string name="web_error">Error de conexion con el end point.</string>
     <string name="fecha">"Fecha: "</string>
     <string name="hora">"Hora: "</string>
+    <string name="dialog_itegrante_registrar">Registrar</string>
+    <string name="dialog_itegrante_cancelar">Cancelar</string>
+    <string name="web_response_ok">Correcto.</string>
+    <string name="dialog_itegrante_alert">¡El integrantre ya se encuentra en la sala!</string>
+    <string name="dialog_unregister_alert">¿Cual es el motivo por el que se quita la asistencia?</string>
+    <string name="dialog_unregister_title">Quitar Asistencia</string>
+    <string name="dialog_unregister_accept">ACEPTAR</string>
+    <string name="dialog_unregister_cancel">CANCELAR</string>
+    <string name="dialog_unregister_condition_one">Debes especificar un motivo</string>
+    <string name="menu_about">Acerca de...</string>
 </resources>

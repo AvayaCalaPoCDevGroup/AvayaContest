@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textSize="20dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/color_text_unit_spnr"
+            android:gravity="center"
+            android:text="@string/dialog_unregister_title" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:text="@string/dialog_unregister_alert" />
+
+        <EditText
+            android:id="@+id/et_dialogunregister_motivo"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_unregister_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:text="@string/dialog_unregister_cancel" />
+            <Button
+                android:id="@+id/btn_unregister_accept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/color_text_unit_spnr"
+                android:textSize="15dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:text="@string/dialog_unregister_accept" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

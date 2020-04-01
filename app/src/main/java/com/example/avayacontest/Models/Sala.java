@@ -11,4 +11,6 @@ public class Sala {
     public String estatusSala = "TERMINATED"; //Default status
     public Date fechaSala;
     public String horaSala;
+
+    public String asistencia;
 }

@@ -12,7 +12,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:textSize="20dp"
@@ -20,6 +19,16 @@
             android:textColor="@color/color_text_unit_spnr"
             android:gravity="center"
             android:text="@string/dialog_itegrante_title" />
+        <TextView
+            android:id="@+id/tv_dialogIntegrante_alert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp"
+            android:layout_margin="10dp"
+            android:text="@string/dialog_itegrante_alert" />
 
         <FrameLayout
             android:layout_margin="10dp"
@@ -109,7 +118,7 @@
                 android:layout_weight="1"
                 android:text="#Nombre" />
         </LinearLayout>
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -127,14 +136,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="#Nombre" />
-        </LinearLayout>
+        </LinearLayout>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="horizontal">
             <Button
-                android:id="@+id/btn_dialogIntegrante_quitar"
+                android:id="@+id/btn_dialogIntegrante_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -144,7 +153,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:text="@string/dialog_itegrante_quitar" />
             <Button
-                android:id="@+id/btn_dialogIntegrante_continuar"
+                android:id="@+id/btn_dialogIntegrante_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

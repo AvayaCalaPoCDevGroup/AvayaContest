@@ -1,5 +1,7 @@
 package com.example.avayacontest.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -9,12 +11,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.avayacontest.BuildConfig;
 import com.example.avayacontest.Clases.Adapters.AdapterEventos;
 import com.example.avayacontest.Clases.Adapters.AdapterSalas;
 import com.example.avayacontest.Clases.Constants;
@@ -206,5 +211,27 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
         if(salas_act != null) //Llega null cuando el evento no existe
             salas.addAll(salas_act);
         adapterSalas.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_act_seleccion, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_about:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("AVAYA CONTEST - version " + BuildConfig.VERSION_NAME);
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

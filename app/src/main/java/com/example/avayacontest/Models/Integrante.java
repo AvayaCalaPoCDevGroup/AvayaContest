@@ -3,6 +3,7 @@ package com.example.avayacontest.Models;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ public class Integrante {
     public String message;
 
     public String idIntegrante;
+    public String empresa;
     public String horaDeIngresoSala;
     public String foto;
     public String correo;
@@ -19,8 +21,10 @@ public class Integrante {
     public String nombre;
     public Date fechaDeIngresoSala;
 
-    //Esta propiedad la manda en busqueda general
-    public String empresa;
+    /**
+     * Salas a las que el integrante ha confirmado asistencia
+     */
+    public ArrayList<Sala> salas;
 
     //Custom
     public Bitmap bitmap;

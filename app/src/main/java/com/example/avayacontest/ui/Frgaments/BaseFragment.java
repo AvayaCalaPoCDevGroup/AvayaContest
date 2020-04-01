@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import com.example.avayacontest.Models.Sala;
 
 public class BaseFragment extends Fragment {
-    protected Sala mSala;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,17 +43,54 @@ public class DialogIntegrante extends Dialog {
     private TextView    tv_dialogIntegrante_empresa;
     private TextView    tv_dialogIntegrante_movil;
     private TextView    tv_dialogIntegrante_correo;
-    private TextView    tv_dialogIntegrante_hora;
-    private Button      btn_dialogIntegrante_quitar;
-    private Button      btn_dialogIntegrante_continuar;
+    //private TextView    tv_dialogIntegrante_hora;
+    private TextView    tv_dialogIntegrante_alert;
+    private Button      btn_dialogIntegrante_one;
+    private Button      btn_dialogIntegrante_two;
 
     private Activity mActivity;
+    private String message_btn_one;
+    private String message_btn_two;
+    private OnActionListener mOnActionListener;
+
+    private int alertVisibility = View.GONE;
 
 
     public DialogIntegrante(@NonNull Context context, Integrante integrante, Activity mActivity) {
         super(context);
         this.integrante = integrante;
         this.mActivity = mActivity;
+    }
+
+    public interface OnActionListener {
+        void onActionOne();
+        void onActionTwo();
+    }
+
+    /**
+     * Listener para los clicks de los botones del dialog
+     * @param l
+     */
+    public void setOnActionListener( OnActionListener l){
+        mOnActionListener = l;
+    }
+
+    /**
+     * Metodo para poner texto a los dos botones que tiene el dialogo
+     * @param message_btn_one
+     * @param message_btn_two
+     */
+    public void setBtnMessages(String message_btn_one, String message_btn_two){
+        this.message_btn_one = message_btn_one;
+        this.message_btn_two = message_btn_two;
+    }
+
+    /**
+     * Metodo para mostrar u ocultar el mensaje de integrante en sala
+     * @param v View.VISIBLE o View.GONE
+     */
+    public void setAlertVisibility(int v){
+        this.alertVisibility = v;
     }
 
     @Override
@@ -69,79 +107,33 @@ public class DialogIntegrante extends Dialog {
         tv_dialogIntegrante_empresa     = findViewById(R.id.tv_dialogIntegrante_empresa   );
         tv_dialogIntegrante_movil       = findViewById(R.id.tv_dialogIntegrante_movil     );
         tv_dialogIntegrante_correo      = findViewById(R.id.tv_dialogIntegrante_correo    );
-        tv_dialogIntegrante_hora        = findViewById(R.id.tv_dialogIntegrante_hora      );
-        btn_dialogIntegrante_quitar     = findViewById(R.id.btn_dialogIntegrante_quitar   );
-        btn_dialogIntegrante_continuar  = findViewById(R.id.btn_dialogIntegrante_continuar);
+        //tv_dialogIntegrante_hora        = findViewById(R.id.tv_dialogIntegrante_hora      );
+        tv_dialogIntegrante_alert       = findViewById(R.id.tv_dialogIntegrante_alert);
+        btn_dialogIntegrante_one     = findViewById(R.id.btn_dialogIntegrante_one   );
+        btn_dialogIntegrante_two  = findViewById(R.id.btn_dialogIntegrante_two);
 
         tv_dialogIntegrante_name      .setText(integrante.nombre);
         tv_dialogIntegrante_empresa   .setText(integrante.empresa);
         tv_dialogIntegrante_movil     .setText(integrante.telefonoMovil);
         tv_dialogIntegrante_correo    .setText(integrante.correo);
-        tv_dialogIntegrante_hora      .setText(integrante.horaDeIngresoSala);
+        //tv_dialogIntegrante_hora      .setText(integrante.horaDeIngresoSala);
+
+        btn_dialogIntegrante_one.setText(message_btn_one);
+        btn_dialogIntegrante_two.setText(message_btn_two);
+
+        tv_dialogIntegrante_alert.setVisibility(alertVisibility);
+        
 
         String imageDataBytes = integrante.foto.substring(integrante.foto.indexOf(",")+1);
         Bitmap bitmap = Utils.ConvertToImage(imageDataBytes);
         iv_dialogIntegrante_foto.setImageBitmap(bitmap);
 
-        btn_dialogIntegrante_continuar.setOnClickListener(v -> {
-            dismiss();
+        btn_dialogIntegrante_two.setOnClickListener(v -> {
+            mOnActionListener.onActionTwo();
         });
-        btn_dialogIntegrante_quitar.setOnClickListener(v -> {
-            HashMap<String,String> parametros = new HashMap<>();
-            parametros.put("action", "quitarAsistenciaSala");
-            parametros.put("idEvento", ((MainActivity)mActivity).mEvento.idEvento.toString());
-            parametros.put("idSala", ((MainActivity)mActivity).mSala.idSala.toString());
-            parametros.put("idIntegrante", ""+integrante.idIntegrante);
-            parametros.put("comentarios", ""); //Aqui falta especificar el motivo por el que se quita la asistencia
-            new DoWebMethodsAsync(WebMethods.URL_SERVER, 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, parametros);
+        btn_dialogIntegrante_one.setOnClickListener(v -> {
+            mOnActionListener.onActionOne();
         });
     }
 
-    private class DoWebMethodsAsync extends AsyncTask<HashMap<String,String>,Void,String> {
-
-        private int option = -1;
-        private String url = "";
-        private ProgressDialog dialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = ProgressDialog.show(getContext(), getContext().getResources().getString(R.string.dialog_wait_title), getContext().getResources().getString(R.string.dialog_wait_msg), true);
-        }
-
-        public DoWebMethodsAsync(String url, int option){
-            this.option = option;
-            this.url = url;
-        }
-
-        @Override
-        protected String doInBackground(HashMap<String, String>... hashMaps) {
-            String resp = "";
-            resp = WebMethods.requestPostMethodAvayaEndpoint(hashMaps[0] , this.url);
-            return resp;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.e("FragmentRegistro", "Response: " + s);
-            Log.e("FragmentRegistro", "Response: " + s);
-            if(s.equals("-1")) {
-                Toast.makeText(getContext(), getContext().getResources().getString(R.string.web_error), Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                return;
-            }
-            dialog.dismiss();
-            switch (option){
-                case 0:
-                    GenericResponse quitarResponse = new Gson().fromJson(s,GenericResponse.class);
-                    Toast.makeText(getContext(),quitarResponse.message,Toast.LENGTH_SHORT).show();
-                    //PENDIENTE: falta validar el esttusde la respuesta, ya qu eel end point siempre regresa code=400
-                    //Si se quito correctamente la asistencia quitamos al integrante de la lista
-                    deleteIntegrante = true;
-                    DialogIntegrante.this.dismiss();
-                    break;
-            }
-        }
-    }
 }

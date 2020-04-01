@@ -18,12 +18,15 @@ import com.example.avayacontest.Interfaces.IScanResultListener;
 import com.example.avayacontest.Models.Integrante;
 import com.example.avayacontest.Models.IntegrantesResponse;
 import com.example.avayacontest.Models.GenericResponse;
+import com.example.avayacontest.Models.Sala;
 import com.example.avayacontest.R;
 import com.example.avayacontest.WebMethods.WebMethods;
 import com.example.avayacontest.ui.Dialogs.DialogIntegrante;
+import com.example.avayacontest.ui.Dialogs.DialogUnregister;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,7 +35,9 @@ import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 public class FragmentRegistro extends BaseFragment implements IScanResultListener {
 
     private ImageView iv_fragmentreg_scan;
-    private UUID LAST_IDINTEGRANTE = new UUID(0l,0l);
+    private final int CON_REGISTRO_Y_EN_SALA = 2;
+    private final int CON_REGISTRO_NO_EN_SALA = 1;
+    private final int PRIMER_REGISTRO = 0;
 
     @Nullable
     @Override
@@ -57,11 +62,9 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
         //Toast.makeText(getContext(), "Result: " + result, Toast.LENGTH_SHORT).show();
         try{
             UUID idIntegrante = UUID.fromString(result);
-            LAST_IDINTEGRANTE = idIntegrante;
             HashMap<String, String> params = new HashMap<>();
             params.put("action", "integrantesPorID");
             params.put("integranteId", idIntegrante.toString());
-
             new DoWebMethodsAsync(WebMethods.URL_SERVER, 0).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
 
         } catch (Exception ex){
@@ -85,9 +88,8 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
          * Clase para consumir los metodos del endpoint en segundo plano
          * @param url url del endpoint
          * @param option opciones que indican el metodo a consumir y la respuesta esperada
-         *               0 - Resgistrar participante con el metodo Registrar Participante del endpoint
-         *               1 - Buscar integrante en sala y registrarlo de no existir con el segundo metodo del endpoint (quitar registro, QuitarAsistencia comentarios TRUE)
-         *               2 - Buscar Integrante en la sala actual y mostrar su informacion
+         *               0 - Buscar Integrante por ID
+         *               1 - Solicitud de registro, en onpostexecute se espera la respuesta generica
          */
         public DoWebMethodsAsync(String url, int option){
             this.option = option;
@@ -105,7 +107,6 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.e("FragmentRegistro", "Response: " + s);
-            Log.e("FragmentRegistro", "Response: " + s);
             if(s.equals("-1")) {
                 Toast.makeText(getContext(), getResources().getString(R.string.web_error), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -117,44 +118,112 @@ public class FragmentRegistro extends BaseFragment implements IScanResultListene
                     if(integrante.code == 400){
                         Toast.makeText(getContext(),integrante.message,Toast.LENGTH_SHORT).show();
                     } else {
+                        //Vemos en la informacion del integrante si es que ya esta registrado en la sala actual
                         DialogIntegrante dialogIntegrante = new DialogIntegrante(getActivity(), integrante, getActivity());
+                        int isOnSala = buscarIntegranteEnSala(integrante.salas);
+                        switch(isOnSala){
+                            case PRIMER_REGISTRO:
+                                dialogIntegrante.setBtnMessages(getResources().getString(R.string.dialog_itegrante_cancelar),getResources().getString(R.string.dialog_itegrante_registrar));
+                                dialogIntegrante.setOnActionListener(new DialogIntegrante.OnActionListener() {
+                                    @Override
+                                    public void onActionOne() {
+                                        dialogIntegrante.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onActionTwo() {
+                                        HashMap<String, String> params = new HashMap<>();
+                                        params.put("action", "asistencia");
+                                        params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
+                                        params.put("idIntegrante", integrante.idIntegrante);
+                                        new DoWebMethodsAsync(WebMethods.URL_SERVER,1).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
+                                        dialogIntegrante.dismiss();
+                                    }
+                                });
+                                break;
+                            case CON_REGISTRO_NO_EN_SALA: //Aqui el integrante ya estaba en la sala pero se le quito la asistencia
+                                dialogIntegrante.setBtnMessages(getResources().getString(R.string.dialog_itegrante_cancelar),getResources().getString(R.string.dialog_itegrante_registrar));
+                                dialogIntegrante.setOnActionListener(new DialogIntegrante.OnActionListener() {
+                                    @Override
+                                    public void onActionOne() {
+                                        dialogIntegrante.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onActionTwo() {
+                                        HashMap<String, String> params = new HashMap<>();
+                                        params.put("action", "quitarAsistenciaSala");
+                                        params.put("idEvento", ((MainActivity)getActivity()).mEvento.idEvento.toString());
+                                        params.put("idIntegrante", integrante.idIntegrante);
+                                        params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
+                                        params.put("comentarios", "TRUE"); //CON TRUE SE LE REGRESA LA ASISTENCIA
+                                        new DoWebMethodsAsync(WebMethods.URL_SERVER,1).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
+                                        dialogIntegrante.dismiss();
+                                    }
+                                });
+                                break;
+                            case CON_REGISTRO_Y_EN_SALA: //aqui el integrante ya esta en la sala, y un segundo integrante intenta entrar con la misma credencial
+                                dialogIntegrante.setBtnMessages(getResources().getString(R.string.dialog_itegrante_quitar),getResources().getString(R.string.dialog_itegrante_continuar));
+                                dialogIntegrante.setAlertVisibility(View.VISIBLE);
+                                dialogIntegrante.setOnActionListener(new DialogIntegrante.OnActionListener() {
+                                    @Override
+                                    public void onActionOne() {
+                                        DialogUnregister dialogUnregister = new DialogUnregister(getActivity());
+                                        dialogUnregister.setCancelable(false);
+                                        dialogUnregister.setOnDismissListener(dialog -> {
+                                            boolean unregister = ((DialogUnregister)dialog).unregister;
+                                            if(unregister){
+                                                HashMap<String, String> params = new HashMap<>();
+                                                params.put("action", "quitarAsistenciaSala");
+                                                params.put("idEvento", ((MainActivity)getActivity()).mEvento.idEvento.toString());
+                                                params.put("idIntegrante", integrante.idIntegrante);
+                                                params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
+                                                params.put("comentarios", ((DialogUnregister)dialog).cause); //CON TRUE SE LE REGRESA LA ASISTENCIA
+                                                new DoWebMethodsAsync(WebMethods.URL_SERVER,1).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
+                                                dialogIntegrante.dismiss();
+                                            } else {
+
+                                            }
+                                        });
+                                        dialogUnregister.show();
+                                    }
+
+                                    @Override
+                                    public void onActionTwo() {
+                                        dialogIntegrante.dismiss();
+                                    }
+                                });
+                                break;
+                        }
                         dialogIntegrante.setCancelable(false);
                         dialogIntegrante.show();
                     }
-                    /*if(resgistroResponse.message.equals("El participante ya se ha registrado a la sala") || resgistroResponse.code == 200){
-                        if(resgistroResponse.code == 400){
-                            //reproducir sonido y vibrar, registro doble
-                        }
-                        //PENDIENTE: aqui falta procedimiento, ya que si un usuario no esta en la sala, pero ya se registro antes aun nos manda que ya se registro en la sala
-                        Toast.makeText(getContext(), resgistroResponse.message, Toast.LENGTH_SHORT).show();
-                        HashMap<String, String> params = new HashMap<>() ;
-                        params.put("action", "integrantesConAsistenciaSala");
-                        params.put("idSala", ((MainActivity)getActivity()).mSala.idSala.toString());
-                        new DoWebMethodsAsync(WebMethods.URL_SERVER, 2).executeOnExecutor(THREAD_POOL_EXECUTOR,params);
-                    } else if (resgistroResponse.message.equals("El participante no se ha registrado al Evento")){
-                        Toast.makeText(getContext(), getResources().getString(R.string.fragment_reg_invaliduser), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), getResources().getString(R.string.fragment_reg_unkonwerror), Toast.LENGTH_SHORT).show();
-                    }*/
                     break;
-                case 2:
-                    /*IntegrantesResponse integrantes = new Gson().fromJson(s, IntegrantesResponse.class);
-
-                    Integrante integrante = null;
-                    for(int i = 0; i < integrantes.participantes.size(); i++){
-                        if(integrantes.participantes.get(i).idIntegrante == LAST_IDINTEGRANTE){
-                            integrante = integrantes.participantes.get(i);
-                            Log.e("FragmentRegistro", "Integrante encontrado");
-                            break;
-                        }
+                case 1:
+                    GenericResponse genericResponse = new Gson().fromJson(s,GenericResponse.class);
+                    String msg = "";
+                    if(genericResponse.code == 200){
+                        msg = getResources().getString(R.string.web_response_ok);
+                    } else {
+                        msg = genericResponse.message;
                     }
-                    //Mostrar el integrante en el dialog
-                    DialogIntegrante dialogIntegrante = new DialogIntegrante(getActivity(), integrante, getActivity());
-                    dialogIntegrante.setCancelable(false);
-                    dialogIntegrante.show();*/
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     break;
             }
             dialog.dismiss();
         }
+    }
+
+    private int buscarIntegranteEnSala(ArrayList<Sala> salas) {
+        UUID idsala = ((MainActivity)getActivity()).mSala.idSala;
+        for (Sala sala: salas) {
+            if(sala.idSala.equals(idsala)){
+                if(sala.asistencia.equals("TRUE"))
+                    return CON_REGISTRO_Y_EN_SALA;
+                else
+                    return CON_REGISTRO_NO_EN_SALA;
+            }
+        }
+        return PRIMER_REGISTRO;
     }
 }

@@ -1,10 +1,12 @@
 package com.example.avayacontest.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.avayacontest.BuildConfig;
 import com.example.avayacontest.Clases.Constants;
 import com.example.avayacontest.Interfaces.IScanResultListener;
 import com.example.avayacontest.Models.Evento;
@@ -17,6 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -85,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), ActivitySeleccionEvento.class);
                 startActivity(i);
                 finish();
+                break;
+            case R.id.menu_about:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("AVAYA CONTEST - version " + BuildConfig.VERSION_NAME);
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
                 break;
 
         }
