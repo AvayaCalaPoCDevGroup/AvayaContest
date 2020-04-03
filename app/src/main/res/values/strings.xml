@@ -41,4 +41,8 @@
     <string name="dialog_unregister_cancel">CANCELAR</string>
     <string name="dialog_unregister_condition_one">Debes especificar un motivo</string>
     <string name="menu_about">Acerca de...</string>
+    <string name="request_permissions_title">Solicitud de permisos</string>
+    <string name="request_permissions_message">Para continuar hay que aceptar los isguientes permisos.</string>
+    <string name="ok">OK</string>
+    <string name="dlog_version_title">Informacion</string>
 </resources>

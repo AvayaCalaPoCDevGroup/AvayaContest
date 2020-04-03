@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.example.avayacontest.BuildConfig;
 import com.example.avayacontest.Clases.Constants;
+import com.example.avayacontest.Clases.Utils;
 import com.example.avayacontest.Interfaces.IScanResultListener;
 import com.example.avayacontest.Models.Evento;
 import com.example.avayacontest.Models.Sala;
@@ -90,11 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_about:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("AVAYA CONTEST - version " + BuildConfig.VERSION_NAME);
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                Utils.showVersionDialog(this);
                 break;
 
         }

@@ -23,6 +23,7 @@ import com.example.avayacontest.BuildConfig;
 import com.example.avayacontest.Clases.Adapters.AdapterEventos;
 import com.example.avayacontest.Clases.Adapters.AdapterSalas;
 import com.example.avayacontest.Clases.Constants;
+import com.example.avayacontest.Clases.Utils;
 import com.example.avayacontest.Models.Evento;
 import com.example.avayacontest.Models.Eventos;
 import com.example.avayacontest.Models.Sala;
@@ -30,6 +31,7 @@ import com.example.avayacontest.Models.Salas;
 import com.example.avayacontest.R;
 import com.example.avayacontest.WebMethods.WebMethods;
 import com.google.gson.Gson;
+import com.journeyapps.barcodescanner.Util;
 
 import java.lang.reflect.Type;
 import java.sql.Time;
@@ -224,11 +226,7 @@ public class ActivitySeleccionEvento extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_about:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("AVAYA CONTEST - version " + BuildConfig.VERSION_NAME);
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                Utils.showVersionDialog(this);
                 break;
 
         }

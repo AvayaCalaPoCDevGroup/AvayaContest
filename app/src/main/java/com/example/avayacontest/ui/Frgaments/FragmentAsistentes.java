@@ -163,11 +163,10 @@ public class FragmentAsistentes extends BaseFragment {
                             unit.bitmap = Utils.ConvertToImage(imageDataBytes);
                             Log.e("FragmentAsistentes", "onPostExecute - Generando imagen de " + unit.nombre);
                         }
-
-                        actualizarLista(integrantesResponse.integrantes);
                     } else {
                         Toast.makeText(getContext(), integrantesResponse.message, Toast.LENGTH_SHORT).show();
                     }
+                    actualizarLista(integrantesResponse.integrantes);
                     break;
                 case 1:
                     GenericResponse genericResponse = new Gson().fromJson(s,GenericResponse.class);

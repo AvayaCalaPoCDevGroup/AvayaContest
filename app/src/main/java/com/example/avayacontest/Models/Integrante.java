@@ -19,6 +19,7 @@ public class Integrante {
     public String telefonoMovil;
     public String estatusAsistencia;
     public String nombre;
+    public String apellido;
     public Date fechaDeIngresoSala;
 
     /**

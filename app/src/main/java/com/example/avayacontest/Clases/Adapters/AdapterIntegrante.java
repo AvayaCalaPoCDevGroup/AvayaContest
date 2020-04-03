@@ -62,9 +62,9 @@ public class AdapterIntegrante extends ArrayAdapter<Integrante> {
             result = convertView;
         }
 
-        viewHolder.tvNombre.setText(integrante.nombre);
-        viewHolder.tvEmpresa.setText(integrante.empresa);
-        viewHolder.tvTelefono.setText(integrante.telefonoMovil);
+        viewHolder.tvNombre.setText(getContext().getResources().getString(R.string.dialog_itegrante_name)+ ": " + integrante.nombre + " " + integrante.apellido);
+        viewHolder.tvEmpresa.setText(getContext().getResources().getString(R.string.dialog_itegrante_empresa) + ": " + integrante.empresa);
+        viewHolder.tvTelefono.setText(getContext().getResources().getString(R.string.dialog_itegrante_tel) + ": " + integrante.telefonoMovil);
         viewHolder.ivFoto.setImageBitmap(integrante.bitmap);
 
         return convertView;
